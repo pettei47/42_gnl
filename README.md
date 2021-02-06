@@ -5,7 +5,7 @@ This is one of 42 project's output.
 	int	get_next_line(int fd, char **line);
 
 ### Description:  
-this function returns a line read from a
+This function returns a line read from a
 file descriptor, without the newline.
 
 ### Parameters:  
