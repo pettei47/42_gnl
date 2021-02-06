@@ -6,7 +6,7 @@
 /*   By: teppei <teppei@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 13:41:36 by tkitagaw          #+#    #+#             */
-/*   Updated: 2021/02/06 13:36:28 by teppei           ###   ########.fr       */
+/*   Updated: 2021/02/06 13:45:41 by teppei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stddef.h>
 
 # define SAFE_FREE(ptr) { free(ptr); ptr = NULL; }
-# define BUFFER_SIZE 256
+//# define BUFFER_SIZE 256
 
 int		get_next_line(int fd, char **line);
 char	*ft_strjoin(char const *s1, char const *s2);

@@ -22,4 +22,4 @@ file descriptor, without the newline.
 then you can get libgnl.a  
 and at the directry your main.c exists  
 
-	gcc main.c -L"filepath of libgnl.a" -lasm
+	gcc main.c -L"filepath of libgnl.a" -lgnl
