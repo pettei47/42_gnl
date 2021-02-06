@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tkitagaw <tkitagaw@student.42.jp>          +#+  +:+       +#+        */
+/*   By: teppei <teppei@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 13:31:18 by tkitagaw          #+#    #+#             */
-/*   Updated: 2020/08/14 12:05:36 by tkitagaw         ###   ########.fr       */
+/*   Updated: 2021/02/06 13:29:19 by teppei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static int	my_mksave(char **save, char **buf)
 
 int			get_next_line(int fd, char **line)
 {
-	static char	*save;
+	static char	*save[256];
 	char		*buf;
 	int			rc;
 
@@ -99,17 +99,17 @@ int			get_next_line(int fd, char **line)
 		return (-1);
 	if (!(buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
 	{
-		SAFE_FREE(save);
+		SAFE_FREE(save[fd]);
 		return (-1);
 	}
 	while ((rc = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
 		buf[rc] = '\0';
-		if (my_mksave(&save, &buf) == -1)
+		if (my_mksave(&save[fd], &buf) == -1)
 			return (-1);
-		if (ft_strchr(save, '\n'))
+		if (ft_strchr(save[fd], '\n'))
 			break ;
 	}
 	SAFE_FREE(buf);
-	return (my_chkline(line, &save, rc));
+	return (my_chkline(line, &save[fd], rc));
 }
