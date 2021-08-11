@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: teppei <teppei@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/11 13:31:18 by tkitagaw          #+#    #+#             */
-/*   Updated: 2021/02/06 13:29:19 by teppei           ###   ########.fr       */
+/*   Updated: 2021/08/11 16:00:59 by teppei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,25 @@ static int	my_mkline(char **line, char **save, char *nl, int ret)
 {
 	char	*tmp;
 
-	if (!(*line = ft_strdup(*save)))
+	*line = gnl_ft_strdup(*save);
+	if (!(*line))
 	{
-		SAFE_FREE(*save);
+		free(*save);
 		return (1);
 	}
 	if (ret == 1)
 	{
-		if (!(tmp = ft_strdup(nl + 1)))
+		tmp = gnl_ft_strdup(nl + 1);
+		if (!tmp)
 		{
-			SAFE_FREE(*save);
+			free(*save);
 			return (1);
 		}
-		SAFE_FREE(*save);
+		free(*save);
 		*save = tmp;
 	}
 	else
-		SAFE_FREE(*save);
+		free(*save);
 	return (0);
 }
 
@@ -44,16 +46,18 @@ static int	my_chkline(char **line, char **save, int rc)
 	ret = 0;
 	if (rc < 0)
 	{
-		SAFE_FREE(*save);
+		free(*save);
 		return (-1);
 	}
 	if (!*save)
 	{
-		if (!(*line = ft_strdup("")))
+		*line = gnl_ft_strdup("");
+		if (!(*line))
 			return (-1);
 		return (0);
 	}
-	if ((nl = ft_strchr(*save, '\n')) != 0)
+	nl = gnl_ft_strchr(*save, '\n');
+	if (nl)
 	{
 		*nl = '\0';
 		ret = 1;
@@ -69,27 +73,29 @@ static int	my_mksave(char **save, char **buf)
 
 	if (!*save)
 	{
-		if (!(*save = ft_strdup(*buf)))
+		*save = gnl_ft_strdup(*buf);
+		if (!(*save))
 		{
-			SAFE_FREE(*buf);
+			free(*buf);
 			return (-1);
 		}
 	}
 	else
 	{
-		if (!(tmp = ft_strjoin(*save, *buf)))
+		tmp = gnl_ft_strjoin(*save, *buf);
+		if (!tmp)
 		{
-			SAFE_FREE(*save);
-			SAFE_FREE(*buf);
+			free(*save);
+			free(*buf);
 			return (-1);
 		}
-		SAFE_FREE(*save);
+		free(*save);
 		*save = tmp;
 	}
 	return (1);
 }
 
-int			get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	static char	*save[256];
 	char		*buf;
@@ -97,19 +103,22 @@ int			get_next_line(int fd, char **line)
 
 	if (fd < 0 || fd == 1 || fd == 2 || !line || BUFFER_SIZE < 1)
 		return (-1);
-	if (!(buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buf)
 	{
-		SAFE_FREE(save[fd]);
+		free(save[fd]);
 		return (-1);
 	}
-	while ((rc = read(fd, buf, BUFFER_SIZE)) > 0)
+	rc = read(fd, buf, BUFFER_SIZE);
+	while (rc > 0)
 	{
 		buf[rc] = '\0';
 		if (my_mksave(&save[fd], &buf) == -1)
 			return (-1);
-		if (ft_strchr(save[fd], '\n'))
+		if (gnl_ft_strchr(save[fd], '\n'))
 			break ;
+		rc = read(fd, buf, BUFFER_SIZE);
 	}
-	SAFE_FREE(buf);
+	free(buf);
 	return (my_chkline(line, &save[fd], rc));
 }
