@@ -10,7 +10,6 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	ar -rc $(NAME) $(OBJS)
-	cp $(NAME) ../../libraries
 %.o: %.c $(INCS)
 	$(CC) $(CFLAGS) -c $< -o $@
 clean:
